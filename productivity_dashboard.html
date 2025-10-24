@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Productivity Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+        
+        .date-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .date-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .card h3 {
+            color: #2d3748;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            font-size: 1.5em;
+        }
+        
+        .task-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+        
+        .task-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .task-list {
+            list-style: none;
+        }
+        
+        .task-item {
+            background: white;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .task-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .task-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e0;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        .checkbox.checked {
+            background: #667eea;
+            border-color: #667eea;
+            position: relative;
+        }
+        
+        .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .habit-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .habit-day {
+            aspect-ratio: 1;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.3s;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .habit-day:hover {
+            border-color: #667eea;
+        }
+        
+        .habit-day.completed {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .time-block {
+            background: white;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .time-block input {
+            width: 100%;
+            border: none;
+            font-size: 0.95em;
+            padding: 5px;
+        }
+        
+        .time-block input:focus {
+            outline: none;
+        }
+        
+        .time-label {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .delete-btn {
+            background: #fc8181;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-left: auto;
+        }
+        
+        .delete-btn:hover {
+            background: #f56565;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Ultimate Productivity Dashboard</h1>
+            <p>Your complete system for getting things done</p>
+        </div>
+        
+        <div class="date-section">
+            <h2 id="currentDate"></h2>
+            <p>Stay focused. Stay productive.</p>
+        </div>
+        
+        <div class="grid">
+            <!-- Daily Tasks -->
+            <div class="card">
+                <h3><span class="icon">✅</span> Today's Tasks</h3>
+                <input type="text" class="task-input" id="taskInput" placeholder="Add a new task...">
+                <button class="btn" onclick="addTask()">Add Task</button>
+                <ul class="task-list" id="taskList"></ul>
+            </div>
+            
+            <!-- Priority Goals -->
+            <div class="card">
+                <h3><span class="icon">🎯</span> Top 3 Priorities</h3>
+                <input type="text" class="task-input" id="priority1" placeholder="Priority #1">
+                <input type="text" class="task-input" id="priority2" placeholder="Priority #2">
+                <input type="text" class="task-input" id="priority3" placeholder="Priority #3">
+            </div>
+            
+            <!-- Time Blocking -->
+            <div class="card">
+                <h3><span class="icon">⏰</span> Time Blocks</h3>
+                <div class="time-block">
+                    <div class="time-label">9:00 - 11:00</div>
+                    <input type="text" placeholder="Deep work session...">
+                </div>
+                <div class="time-block">
+                    <div class="time-label">11:00 - 13:00</div>
+                    <input type="text" placeholder="Meetings & calls...">
+                </div>
+                <div class="time-block">
+                    <div class="time-label">14:00 - 17:00</div>
+                    <input type="text" placeholder="Project work...">
+                </div>
+                <div class="time-block">
+                    <div class="time-label">17:00 - 18:00</div>
+                    <input type="text" placeholder="Admin & email...">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Habit Tracker -->
+        <div class="card" style="margin-bottom: 30px;">
+            <h3><span class="icon">🔥</span> 7-Day Habit Tracker</h3>
+            <div class="habit-grid" id="habitGrid"></div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="completedToday">0</div>
+                    <div class="stat-label">Tasks Today</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="habitStreak">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="totalTasks">0</div>
+                    <div class="stat-label">Total Tasks</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Notes Section -->
+        <div class="card">
+            <h3><span class="icon">📝</span> Quick Notes & Ideas</h3>
+            <textarea class="task-input" id="notes" rows="6" placeholder="Capture your thoughts, ideas, and reminders here..." style="resize: vertical; min-height: 150px;"></textarea>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize date
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', dateOptions);
+        
+        // Task management
+        let tasks = [];
+        
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const taskText = input.value.trim();
+            
+            if (taskText) {
+                tasks.push({ text: taskText, completed: false });
+                input.value = '';
+                renderTasks();
+                updateStats();
+            }
+        }
+        
+        function toggleTask(index) {
+            tasks[index].completed = !tasks[index].completed;
+            renderTasks();
+            updateStats();
+        }
+        
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            renderTasks();
+            updateStats();
+        }
+        
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = 'task-item' + (task.completed ? ' completed' : '');
+                
+                const checkbox = document.createElement('div');
+                checkbox.className = 'checkbox' + (task.completed ? ' checked' : '');
+                checkbox.onclick = () => toggleTask(index);
+                
+                const text = document.createElement('span');
+                text.textContent = task.text;
+                text.style.flex = '1';
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    deleteTask(index);
+                };
+                
+                li.appendChild(checkbox);
+                li.appendChild(text);
+                li.appendChild(deleteBtn);
+                taskList.appendChild(li);
+            });
+        }
+        
+        // Habit tracker
+        function initHabitTracker() {
+            const habitGrid = document.getElementById('habitGrid');
+            const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+            
+            days.forEach((day, index) => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'habit-day';
+                dayEl.textContent = day;
+                dayEl.onclick = () => toggleHabit(index);
+                habitGrid.appendChild(dayEl);
+            });
+        }
+        
+        function toggleHabit(index) {
+            const habitDays = document.querySelectorAll('.habit-day');
+            habitDays[index].classList.toggle('completed');
+            updateStats();
+        }
+        
+        function updateStats() {
+            const completedTasks = tasks.filter(t => t.completed).length;
+            const completedHabits = document.querySelectorAll('.habit-day.completed').length;
+            
+            document.getElementById('completedToday').textContent = completedTasks;
+            document.getElementById('habitStreak').textContent = completedHabits;
+            document.getElementById('totalTasks').textContent = tasks.length;
+        }
+        
+        // Enter key support for tasks
+        document.getElementById('taskInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+        
+        // Initialize
+        initHabitTracker();
+        updateStats();
+    </script>
+
+// Save to local storage
+function saveData() {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem('notes', document.getElementById('notes').value);
+}
+
+// Load from local storage
+function loadData() {
+    const savedTasks = localStorage.getItem('tasks');
+    const savedNotes = localStorage.getItem('notes');
+    if (savedTasks) tasks = JSON.parse(savedTasks);
+    if (savedNotes) document.getElementById('notes').value = savedNotes;
+    renderTasks();
+    updateStats();
+}
+
+// Update save on changes
+window.addEventListener('beforeunload', saveData);
+
+// Initialize
+loadData();
+
+</body>
+</html>
