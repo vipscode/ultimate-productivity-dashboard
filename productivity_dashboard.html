@@ -449,28 +449,5 @@
         initHabitTracker();
         updateStats();
     </script>
-
-// Save to local storage
-function saveData() {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    localStorage.setItem('notes', document.getElementById('notes').value);
-}
-
-// Load from local storage
-function loadData() {
-    const savedTasks = localStorage.getItem('tasks');
-    const savedNotes = localStorage.getItem('notes');
-    if (savedTasks) tasks = JSON.parse(savedTasks);
-    if (savedNotes) document.getElementById('notes').value = savedNotes;
-    renderTasks();
-    updateStats();
-}
-
-// Update save on changes
-window.addEventListener('beforeunload', saveData);
-
-// Initialize
-loadData();
-
 </body>
 </html>
